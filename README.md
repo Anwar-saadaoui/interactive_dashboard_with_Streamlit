@@ -22,17 +22,17 @@ This project takes raw Superstore sales data through a full professional data pi
 ```
 superstore_project/
 │
-├── docker-compose.yml              # All services: PostgreSQL, pgAdmin, Jupyter, Streamlit
-├── Dockerfile.jupyter              # Minimal Python 3.11 Jupyter image
+├── docker-compose.yml              
+├── Dockerfile.jupyter              
 │
 ├── data/
-│   └── superstore_cleaned.csv      # Cleaned source dataset
+│   └── superstore_cleaned.csv      
 │
 ├── notebooks/
-│   └── superstore_pipeline.ipynb   # Data loading & normalization pipeline
+│   └── superstore_pipeline.ipynb   
 │
 ├── dashboard/
-│   └── app.py                      # Streamlit interactive dashboard
+│   └── app.py                      
 │
 └── README.md
 ```
@@ -288,9 +288,3 @@ __pycache__/
 | 🔵 Backlog | Dashboard deployment, pipeline automation, advanced SQL, performance indexes |
 
 ---
-
-## 👤 Author
-
-**Anwar**
-Data Engineering Project — 3 Sprint Pipeline
-Superstore Sales Analytics
