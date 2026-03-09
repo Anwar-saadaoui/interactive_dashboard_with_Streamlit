@@ -1,6 +1,6 @@
 # 🛒 Superstore Sales — End-to-End Data Analytics Project
 
-A complete Data Engineering and Analytics pipeline built over 3 sprints:
+A complete Data Analytics pipeline built over 3 sprints:
 **Data Cleaning → PostgreSQL Database → Interactive Dashboard**
 
 ---
