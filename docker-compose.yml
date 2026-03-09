@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: superstore_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: superstore_user
+      POSTGRES_PASSWORD: superstore_pass
+      POSTGRES_DB: superstore_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U superstore_user -d superstore_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: superstore_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: anwar@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+    container_name: superstore_jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work/notebooks
+      - ./data:/home/jovyan/work/data
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: superstore_db
+      DB_USER: superstore_user
+      DB_PASSWORD: superstore_pass
+    depends_on:
+      postgres:
+        condition: service_healthy
+  
+  streamlit:
+    image: python:3.11-slim
+    container_name: superstore_streamlit
+    working_dir: /app
+    volumes:
+      - ./dashboard:/app
+    ports:
+      - "8501:8501"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: superstore_db
+      DB_USER: superstore_user
+      DB_PASSWORD: superstore_pass
+    command: bash -c "pip install streamlit sqlalchemy psycopg2-binary pandas matplotlib seaborn plotly --quiet && streamlit run app.py --server.port=8501 --server.address=0.0.0.0"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
